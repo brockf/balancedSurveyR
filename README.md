@@ -1,6 +1,6 @@
 # balancedSurveyR
 
-R package implementing a model-based sampling method that corrects for nonresponse bias in surveys.
+R package implementing a model-based sampling method to correct for nonresponse bias in surveys.
 
 ## Installation
 
