@@ -1,0 +1,22 @@
+Package: balancedSurveyR
+Title: Model-based sampling method for correcting nonresponse bias.
+Version: 0.0.0.9000
+Authors@R: person("Brock", "Ferguson", email = "brock.ferguson@gmail.com", role = c("aut", "cre"))
+Description: Use model-based sampling of a population to estimate and correct
+    for nonresponse bias.
+Depends:
+    R (>= 3.3.1)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports:
+    dplyr,
+    tidyr,
+    Matrix,
+    stats,
+    magrittr,
+    ggplot2,
+    xgboost
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
