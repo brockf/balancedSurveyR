@@ -1,5 +1,5 @@
 Package: balancedSurveyR
-Title: Model-based sampling method for correcting nonresponse bias.
+Title: R package implementing a model-based sampling method that corrects for nonresponse bias.
 Version: 0.0.0.9000
 Authors@R: person("Brock", "Ferguson", email = "brock.ferguson@gmail.com", role = c("aut", "cre"))
 Description: Use model-based sampling of a population to estimate and correct
