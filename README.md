@@ -4,11 +4,14 @@ R package implementing a model-based sampling method that corrects for nonrespon
 
 ## Installation
 
-```devtools::install_github('brockf/balancedSurveyR')```
+```{R}
+devtools::install_github('brockf/balancedSurveyR')
+```
   
 ## Example
 
-```library('balancedSurveyR')
+```{R}
+library('balancedSurveyR')
 library('dplyr')
 library('ggplot2')
 
@@ -62,5 +65,6 @@ responder_characteristics <- characteristics(sample = sampled_population,
                                             model = model,
                                             state = 'responded')
 
-responder_characteristics```
+responder_characteristics
+```
 
