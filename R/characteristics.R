@@ -54,6 +54,9 @@ characteristics <- function(sample,
 
   # if we are only looking at responders, let's trim down sample()
   if (state == 'responded') {
+    model_matrix <- build_model_matrix(model$model_formula, sample)
+    sample$response_prob <- xgboost::predict(model$model, model_matrix)
+
     sample <- sample %>%
       mutate(
         .responded = rbinom(nrow(.), size = 1, prob=response_prob)
