@@ -143,7 +143,7 @@ historical_model <- function(data,
                          objective = 'reg:logistic',
 
                          # shrinkage:
-                         eta = .01
+                         eta = .3
                        ))
 
     # get best iteration for optimal nrounds
