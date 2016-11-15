@@ -60,8 +60,8 @@ sampler <- function(population,
     }
 
     # splines can push outside of boundaries; truncate extreme values
-    population$response_prob <- ifelse(population$response_prob <= 0, 0.001, population$response_prob)
-    population$response_prob <- ifelse(population$response_prob >= 1, 0.999, population$response_prob)
+    population$response_prob <- ifelse(population$response_prob <= 0, 0.005, population$response_prob)
+    population$response_prob <- ifelse(population$response_prob >= 1, 0.995, population$response_prob)
 
     # calculate sample weights as w = 1 / prob
     population$sample_weight = 1 / population$response_prob
