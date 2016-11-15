@@ -27,10 +27,10 @@
 #' @return ggplot2 object
 #' @export
 characteristics <- function(sample,
-                            population,
-                            model,
-                            state = 'sampled',
-                            plot_type = 'density') {
+                             population,
+                             model,
+                             state = 'sampled',
+                             plot_type = 'density') {
   # argument validation
   if (!state %in% c('sampled','responded')) {
     stop("state must be either 'sampled' or 'responded'")
@@ -48,6 +48,10 @@ characteristics <- function(sample,
     stop("model must be a balancedSurveyR model -- i.e., the output from historical_model()")
   }
 
+  # isolate numeric (plottable) from non-numeric (non-plottable) columns
+  numeric_columns <- colnames(sample)[sapply(sample[, model$attribute_columns], function(x) { return(is.numeric(x)) })]
+  non_numeric_columns <- colnames(sample)[!colnames(sample) %in% numeric_columns]
+
   # if we are only looking at responders, let's trim down sample()
   if (state == 'responded') {
     sample <- sample %>%
@@ -64,7 +68,7 @@ characteristics <- function(sample,
   comparisons <- bind_rows(
     sample %>%
       dplyr::select_(.dots = model$attribute_columns) %>%
-      tidyr::gather('Attribute','Value') %>%
+      tidyr::gather_('Attribute','Value', numeric_columns) %>%
       mutate(Group='Model Sample'),
 
     population %>%
@@ -92,12 +96,12 @@ characteristics <- function(sample,
         }
       }) %>%
       dplyr::select_(.dots = model$attribute_columns) %>%
-      tidyr::gather('Attribute','Value') %>%
+      tidyr::gather_('Attribute','Value', numeric_columns) %>%
       mutate(Group='Random Sample'),
 
     population %>%
       dplyr::select_(.dots = model$attribute_columns) %>%
-      tidyr::gather('Attribute','Value') %>%
+      tidyr::gather_('Attribute','Value', numeric_columns) %>%
       mutate(Group='Population')
   )
 
@@ -109,9 +113,15 @@ characteristics <- function(sample,
     p <- p + ggplot2::geom_density(alpha=.3)
   }
 
-  p <- p + ggplot2::facet_wrap(~Attribute, scales='free', nrow=4) +
-    ggplot2::theme_bw() +
-    ggplot2::theme(legend.position="top")
+  if (length(non_numeric_columns) == 0) {
+    p <- p + ggplot2::facet_wrap(~Attribute, scales='free', nrow=4) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position="top")
+  } else {
+    p <- p + ggplot2::facet_wrap(c('Attribute',non_numeric_columns), scales='free', nrow=4) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(legend.position="top")
+  }
 
   if (state == 'responded') {
     p <- p + ggplot2::ggtitle('Responder Characteristics')
