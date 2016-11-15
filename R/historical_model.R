@@ -107,7 +107,7 @@ historical_model <- function(data,
     stop("response_column must be a character string pointing to a column in the dataframe")
   }
 
-  if (sum(is.na(as.logical(data[, response_column]))) > 0) {
+  if (sum(is.na(as.logical(data[[response_column]]))) > 0) {
     stop("response_column should contain numeric (1, 0) or logical (TRUE, FALSE) data indicating
           response/no response for each record. No missing data is allowed")
   }
@@ -117,7 +117,7 @@ historical_model <- function(data,
   }
 
   # prepare response variable
-  data[, response_column] <- as.logical(data[, response_column])
+  data[, response_column] <- as.logical(data[[response_column]])
 
   # xgbTree method
   if (model == 'xgbTree') {
@@ -137,7 +137,7 @@ historical_model <- function(data,
                        maximize=FALSE,
                        nrounds = 5000,
                        verbose = 0,
-                       label = as.numeric(data[, response_column]),
+                       label = as.numeric(data[[response_column]]),
                        params = list(
                          booster = 'gbtree',
                          objective = 'reg:logistic',
@@ -155,7 +155,7 @@ historical_model <- function(data,
     # fit final model
     model <- xgboost::xgboost(data = model_matrix,
                      nrounds = optimal_nrounds,
-                     label = as.numeric(data[, response_column]),
+                     label = as.numeric(data[[response_column]]),
                      verbose = 0,
                      params = list(
                        booster = 'gbtree',
@@ -171,7 +171,7 @@ historical_model <- function(data,
     # why do we do this? because some models are biased, and we actually care about
     # the *actual* response rate (not relative response rate)
     model_predictions <- xgboost::predict(model, model_matrix)
-    empirical_response_rate <- as.numeric(data[, response_column])
+    empirical_response_rate <- as.numeric(data[[response_column]])
 
     # splines only work if we have 4+ unique predicted values
     if (length(unique(model_predictions)) >= 4) {
