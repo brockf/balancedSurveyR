@@ -63,6 +63,9 @@ sampler <- function(population,
     population$response_prob <- ifelse(population$response_prob <= 0, 0.005, population$response_prob)
     population$response_prob <- ifelse(population$response_prob >= 1, 0.995, population$response_prob)
 
+    # filter out potential people who have less than .005 probability
+    population <- population %>% filter(response_prob >= .005)
+
     # calculate sample weights as w = 1 / prob
     population$sample_weight = 1 / population$response_prob
 
